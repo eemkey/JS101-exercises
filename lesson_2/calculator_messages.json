@@ -1,0 +1,21 @@
+{
+  "en": {
+    "welcome": "Welcome to Calculator!",
+    "firstNum": "What's the first number?",
+    "invalid": "Hmm... that doesn't look like a valid number.",
+    "secondNum": "What's the second number?",
+    "operation": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+    "newCalc": "Would you like to do a new calculation? (y/n)"
+  },
+  "es": {
+    "welcome": "Welcome to Calculator!",
+    "firstNum": "¿Cuál es el primer número?",
+    "invalid": "Hmm ... eso no parece un número válido.",
+    "secondNum": "¿Cuál es el segundo número?",
+    "operation": "¿Qué operación te gustaría realizar?\n1) Sumar 2) Restar 3) Multiplicar 4) Dividir",
+    "newCalc": "¿Te gustaría hacer un nuevo cálculo? (y/n)"
+  }
+
+  
+
+}
