@@ -14,6 +14,10 @@ function invalidNum(num) {
   return num.trimStart() === "" || Number.isNaN(Number(num)) || Number(num) < 0;
 }
 
+function invalidDuration(num) {
+  return num.trimStart() === "" || Number.isNaN(Number(num)) || Number(num) <= 0;
+}
+
 function getUserInput(inputType, validity) {
   prompt(inputType);
   let input = readline.question();
@@ -51,7 +55,7 @@ prompt("welcome");
 while (true) {
   const loanInput = getUserInput("loan", invalidNum);
   const aprInput = getUserInput("apr", invalidNum);
-  const durationInput = getUserInput("duration", invalidNum);
+  const durationInput = getUserInput("duration", invalidDuration);
 
   console.log(`your calculated loan amount is $${calcMortgage(loanInput, aprInput, durationInput).toFixed(2)}`);
 
