@@ -11,11 +11,15 @@ function messages(msg) {
 }
 
 function invalidNum(num) {
-  return num.trimStart() === "" || Number.isNaN(Number(num)) || Number(num) < 0;
+  return num.trimStart() === "" ||
+  Number.isNaN(Number(num)) ||
+  Number(num) < 0;
 }
 
 function invalidDuration(num) {
-  return num.trimStart() === "" || Number.isNaN(Number(num)) || Number(num) <= 0;
+  return num.trimStart() === "" ||
+  Number.isNaN(Number(num)) ||
+  Number(num) <= 0;
 }
 
 function getUserInput(inputType, validity) {
