@@ -1,33 +1,28 @@
 const readline = require("readline-sync");
 const MESSAGES = require("./mortgage_messages.json");
 
-function prompt(key) {
-  let message = messages(key);
-  console.log(`=> ${message}`);
+function displayMsg(msg) {
+  console.log(`=> ${MESSAGES[msg]}`);
 }
 
-function messages(msg) {
-  return MESSAGES[msg];
-}
-
-function invalidNum(num) {
+function invalidNumTest(num) {
   return num.trimStart() === "" ||
-  Number.isNaN(Number(num)) ||
-  Number(num) < 0;
+    Number.isNaN(Number(num)) ||
+    Number(num) < 0;
 }
 
-function invalidDuration(num) {
+function invalidDurationTest(num) {
   return num.trimStart() === "" ||
-  Number.isNaN(Number(num)) ||
-  Number(num) <= 0;
+    Number.isNaN(Number(num)) ||
+    Number(num) <= 0;
 }
 
 function getUserInput(inputType, validity) {
-  prompt(inputType);
+  displayMsg(inputType);
   let input = readline.question();
   while (validity(input)) {
-    prompt("invalid");
-    prompt(inputType);
+    displayMsg("invalid");
+    displayMsg(inputType);
     input = readline.question();
   }
   return input;
@@ -42,11 +37,11 @@ function calcMortgage(loanAmt, apr, duration) {
   }
 }
 
-function exit() {
-  prompt("restart");
+function restart() {
+  displayMsg("restart");
   let reInput = readline.question().toLowerCase();
   while ((reInput[0] !== "n" && reInput[0] !== "y") || reInput.length !== 1) {
-    prompt("yesOrNo");
+    displayMsg("yesOrNo");
     reInput = readline.question().toLowerCase();
   }
   return reInput;
@@ -54,15 +49,14 @@ function exit() {
 
 //PROGRAM START
 
-prompt("welcome");
+displayMsg("welcome");
 
 while (true) {
-  const loanInput = getUserInput("loan", invalidNum);
-  const aprInput = getUserInput("apr", invalidNum);
-  const durationInput = getUserInput("duration", invalidDuration);
+  const loanInput = getUserInput("loan", invalidNumTest);
+  const aprInput = getUserInput("apr", invalidNumTest);
+  const durationInput = getUserInput("duration", invalidDurationTest);
+  console.log(`Your calculated loan amount is $${calcMortgage(loanInput, aprInput, durationInput).toFixed(2)}.`);
 
-  console.log(`your calculated loan amount is $${calcMortgage(loanInput, aprInput, durationInput).toFixed(2)}`);
-
-  let result = exit();
-  if ( result === "n") break;
+  if (restart() === "n") break;
+  console.clear();
 }

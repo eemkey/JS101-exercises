@@ -1,9 +1,9 @@
 {
   "welcome": "Welcome to the Mortgage Calculator!",
-  "loan": "Please enter your loan amount (ex: 450000)",
-  "apr": "Please enter your APR (ex: 5 for 5%, 4.5 for 4.5%)",
+  "loan": "Please enter your loan amount. (ex: 450000 for $450,000)",
+  "apr": "Please enter your APR. (ex: 5 for 5%, 4.5 for 4.5%)",
   "invalid": "Invalid entry, please try again.",
-  "duration": "Please enter the duration of your loan in months",
+  "duration": "Please enter the duration of your loan in months.",
   "restart": "Would you like to start over? (y/n)",
   "yesOrNo": "Please enter y or n."
 }
