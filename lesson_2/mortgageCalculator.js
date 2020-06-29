@@ -17,7 +17,7 @@ function invalidDurationTest(num) {
     Number(num) <= 0;
 }
 
-function getUserInput(inputType, validity) {
+function getInputAndCheck(inputType, validity) {
   displayMsg(inputType);
   let input = readline.question();
   while (validity(input)) {
@@ -52,9 +52,9 @@ function restart() {
 displayMsg("welcome");
 
 while (true) {
-  const loanInput = getUserInput("loan", invalidNumTest);
-  const aprInput = getUserInput("apr", invalidNumTest);
-  const durationInput = getUserInput("duration", invalidDurationTest);
+  const loanInput = getInputAndCheck("loan", invalidNumTest);
+  const aprInput = getInputAndCheck("apr", invalidNumTest);
+  const durationInput = getInputAndCheck("duration", invalidDurationTest);
   console.log(`Your calculated loan amount is $${calcMortgage(loanInput, aprInput, durationInput).toFixed(2)}.`);
 
   if (restart() === "n") break;
