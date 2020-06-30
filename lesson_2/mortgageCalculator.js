@@ -48,14 +48,14 @@ function restart() {
 }
 
 //PROGRAM START
-
+console.clear();
 displayMsg("welcome");
 
 while (true) {
   const loanInput = getInputAndCheck("loan", invalidNumTest);
   const aprInput = getInputAndCheck("apr", invalidNumTest);
   const durationInput = getInputAndCheck("duration", invalidDurationTest);
-  console.log(`Your calculated loan amount is $${calcMortgage(loanInput, aprInput, durationInput).toFixed(2)}.`);
+  console.log(`Your calculated mortgage payment is $${calcMortgage(loanInput, aprInput, durationInput).toFixed(2)}.`);
 
   if (restart() === "n") break;
   console.clear();

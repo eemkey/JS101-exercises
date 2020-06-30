@@ -23,7 +23,7 @@ let computerCounter = 0;
 let grandWinner = "";
 
 function prompt(msg) {
-  console.log(`=> ${msg}`);
+  console.log(`=> ${MESSAGES[msg]}`);
 }
 
 function validityTest(input) {
@@ -43,12 +43,12 @@ function convertInput(input) {
 }
 
 function getPlayerChoice() {
-  prompt(MESSAGES["choose"]);
+  prompt("choose");
   let choice = readline.question().toLowerCase();
 
   while (validityTest(choice)) {
-    prompt(MESSAGES["invalid"]);
-    prompt(MESSAGES["choose"]);
+    prompt("invalid");
+    prompt("choose");
     choice = readline.question().toLowerCase();
   }
   return convertInput(choice);
@@ -75,17 +75,17 @@ function updateScore(plChoice, compChoice) {
 }
 
 function displayWinner(plChoice, compChoice) {
-  prompt(`Player chose ${plChoice}, Computer chose ${compChoice}.`);
+  console.log(`Player chose ${plChoice}, Computer chose ${compChoice}.`);
   if (isWinner(plChoice, compChoice)) {
-    prompt(MESSAGES["playerWin"]);
+    prompt("playerWin");
   } else if (plChoice === compChoice) {
-    prompt(MESSAGES["tie"]);
+    prompt("tie");
   } else {
-    prompt(MESSAGES["compWin"]);
+    prompt("compWin");
   }
-  prompt(`Player: ${playerCounter} Computer: ${computerCounter}`);
+  console.log(`Player: ${playerCounter} Computer: ${computerCounter}`);
   if (grandWinner.length !== 0) {
-    prompt(`${grandWinner} is the grand winner!`);
+    console.log(`${grandWinner} is the grand winner!`);
   }
 }
 
@@ -104,12 +104,12 @@ function playGame() {
 }
 
 function endGame() {
-  prompt(MESSAGES["playAgain"]);
+  prompt("playAgain");
   let answer = readline.question().toLowerCase();
 
   while ((answer[0] !== "n" && answer[0] !== "y") || answer.length !== 1) {
-    prompt(MESSAGES["invalid"]);
-    prompt(MESSAGES["yOrN"]);
+    prompt("invalid");
+    prompt("yesOrNo");
     answer = readline.question().toLowerCase();
   }
   console.clear();
@@ -118,8 +118,8 @@ function endGame() {
 
 function init() {
   console.clear();
-  prompt(MESSAGES["welcome"]);
-  prompt(MESSAGES["firstToFive"]);
+  prompt("welcome");
+  prompt("firstToFive");
   while (true) {
     playGame();
     if (endGame()) break;

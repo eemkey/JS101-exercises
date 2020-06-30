@@ -11,12 +11,10 @@ function displayWinner(choice, computerChoice) {
       (choice === "paper" && computerChoice === "rock") ||
       (choice === "scissors" && computerChoice === "paper")) {
     prompt("You win!");
-  } else if ((choice === "rock" && computerChoice === "paper") ||
-            (choice === "paper" && computerChoice === "scissors") ||
-            (choice === "scissors" && computerChoice === "rock")) {
-    prompt("Computer wins!");
-  } else {
+  } else if (choice === computerChoice) {
     prompt("It's a tie!");
+  } else {
+    prompt("Computer wins!");
   }
 }
 
