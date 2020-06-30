@@ -1,0 +1,11 @@
+{
+  "choose": "Choose one: rock (r), paper (p), scissors (sc), lizard (l), spock (sp).",
+  "invalid": "Invalid input.",
+  "playerWin": "You win!",
+  "compWin": "Computer wins!",
+  "tie": "It's a tie!",
+  "playAgain": "Do you want to play again? (y/n)",
+  "yOrN": "Please enter 'y' or 'n'",
+  "welcome": "Welcome to Rock Paper Scissors Lizard Spock!",
+  "firstToFive": "First to 5 is the grand winner."
+}
