@@ -5,5 +5,6 @@
   "invalid": "Invalid entry, please try again.",
   "duration": "Please enter the duration of your loan in months.",
   "restart": "Would you like to start over? (y/n)",
-  "yesOrNo": "Please enter y or n."
+  "yesOrNo": "Please enter y or n.",
+  "finalCalc": "Your calculated mortgage payment is $%s."
 }

@@ -17,7 +17,7 @@ function invalidDurationTest(num) {
     Number(num) <= 0;
 }
 
-function getInputAndCheck(inputType, validity) {
+function getInput(inputType, validity) {
   displayMsg(inputType);
   let input = readline.question();
   while (validity(input)) {
@@ -29,7 +29,7 @@ function getInputAndCheck(inputType, validity) {
 }
 
 function calcMortgage(loanAmt, apr, duration) {
-  let mthlyRate = apr / 100 / 12;
+  let mthlyRate = apr / 1200;
   if (mthlyRate === 0) {
     return loanAmt / duration;
   } else {
@@ -37,7 +37,7 @@ function calcMortgage(loanAmt, apr, duration) {
   }
 }
 
-function restart() {
+function getNewCalculationAnswer() {
   displayMsg("restart");
   let reInput = readline.question().toLowerCase();
   while ((reInput[0] !== "n" && reInput[0] !== "y") || reInput.length !== 1) {
@@ -52,11 +52,11 @@ console.clear();
 displayMsg("welcome");
 
 while (true) {
-  const loanInput = getInputAndCheck("loan", invalidNumTest);
-  const aprInput = getInputAndCheck("apr", invalidNumTest);
-  const durationInput = getInputAndCheck("duration", invalidDurationTest);
-  console.log(`Your calculated mortgage payment is $${calcMortgage(loanInput, aprInput, durationInput).toFixed(2)}.`);
+  const loanInput = getInput("loan", invalidNumTest);
+  const aprInput = getInput("apr", invalidNumTest);
+  const durationInput = getInput("duration", invalidDurationTest);
+  console.log(`${MESSAGES["finalCalc"]}`, calcMortgage(loanInput, aprInput, durationInput).toFixed(2));
 
-  if (restart() === "n") break;
+  if (getNewCalculationAnswer() === "n") break;
   console.clear();
 }
