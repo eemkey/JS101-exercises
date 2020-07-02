@@ -7,5 +7,8 @@
   "playAgain": "Do you want to play again? (y/n)",
   "yesOrNo": "Please enter 'y' or 'n'",
   "welcome": "Welcome to Rock Paper Scissors Lizard Spock!",
-  "firstToFive": "First to 5 is the grand winner."
+  "firstToNum": "First to %s is the grand winner.",
+  "player": "Player: %s",
+  "computer": "Computer: %s",
+  "grandWinner": "%s is the grand winner!"
 }

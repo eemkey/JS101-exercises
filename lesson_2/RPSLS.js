@@ -13,7 +13,7 @@ const VALID_CHOICES = {
 const WINNING_COMBOS = {
   rock: ["scissors", "lizard"],
   paper: ["rock", "spock"],
-  scissors: ["paper", "spock"],
+  scissors: ["paper", "lizard"],
   lizard: ["paper", "spock"],
   spock: ["rock", "scissors"]
 };
@@ -75,7 +75,7 @@ function updateScore(plChoice, compChoice) {
 }
 
 function displayWinner(plChoice, compChoice) {
-  console.log(`Player chose ${plChoice}, Computer chose ${compChoice}.`);
+  console.log(`=> ${MESSAGES["player"]}, ${MESSAGES["computer"]}`, plChoice, compChoice);
   if (isWinner(plChoice, compChoice)) {
     prompt("playerWin");
   } else if (plChoice === compChoice) {
@@ -83,9 +83,9 @@ function displayWinner(plChoice, compChoice) {
   } else {
     prompt("compWin");
   }
-  console.log(`Player: ${playerCounter} Computer: ${computerCounter}`);
+  console.log(`=> ${MESSAGES["player"]}, ${MESSAGES["computer"]}`, playerCounter, computerCounter);
   if (grandWinner.length !== 0) {
-    console.log(`${grandWinner} is the grand winner!`);
+    console.log(`${MESSAGES["grandWinner"]}`, grandWinner);
   }
 }
 
@@ -95,7 +95,7 @@ function resetScore() {
   grandWinner = "";
 }
 
-function playGame() {
+function playRound() {
   let playerChoice = getPlayerChoice();
   let computerChoice = getComputerChoice();
   updateScore(playerChoice, computerChoice);
@@ -103,7 +103,7 @@ function playGame() {
   if (grandWinner.length !== 0) resetScore();
 }
 
-function endGame() {
+function playNewGame() {
   prompt("playAgain");
   let answer = readline.question().toLowerCase();
 
@@ -116,14 +116,14 @@ function endGame() {
   return answer[0] !== "y";
 }
 
-function init() {
+function playGame() {
   console.clear();
   prompt("welcome");
-  prompt("firstToFive");
+  console.log(`${MESSAGES["firstToNum"]}`, ROUNDS_TO_WIN);
   while (true) {
-    playGame();
-    if (endGame()) break;
+    playRound();
+    if (playNewGame()) break;
   }
 }
 
-init();
+playGame();
