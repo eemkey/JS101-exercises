@@ -1,7 +1,7 @@
 {
   "choose": "Choose one: rock (r), paper (p), scissors (sc), lizard (l), spock (sp).",
   "invalid": "Invalid input.",
-  "playerWin": "You win!",
+  "playerWin": "Player wins!",
   "compWin": "Computer wins!",
   "tie": "It's a tie!",
   "playAgain": "Do you want to play again? (y/n)",

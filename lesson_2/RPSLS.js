@@ -95,7 +95,7 @@ function resetScore() {
   grandWinner = "";
 }
 
-function playRound() {
+function playGame() {
   let playerChoice = getPlayerChoice();
   let computerChoice = getComputerChoice();
   updateScore(playerChoice, computerChoice);
@@ -116,14 +116,10 @@ function playNewGame() {
   return answer[0] !== "y";
 }
 
-function playGame() {
-  console.clear();
-  prompt("welcome");
-  console.log(`${MESSAGES["firstToNum"]}`, ROUNDS_TO_WIN);
-  while (true) {
-    playRound();
-    if (playNewGame()) break;
-  }
+console.clear();
+prompt("welcome");
+console.log(`${MESSAGES["firstToNum"]}`, ROUNDS_TO_WIN);
+while (true) {
+  playGame();
+  if (playNewGame()) break;
 }
-
-playGame();
