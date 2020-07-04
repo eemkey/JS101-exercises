@@ -119,6 +119,7 @@ function playNewGame() {
 console.clear();
 prompt("welcome");
 console.log(`${MESSAGES["firstToNum"]}`, ROUNDS_TO_WIN);
+
 while (true) {
   playGame();
   if (playNewGame()) break;
