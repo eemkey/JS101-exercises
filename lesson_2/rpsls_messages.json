@@ -10,5 +10,6 @@
   "firstToNum": "First to %s is the grand winner.",
   "player": "Player: %s",
   "computer": "Computer: %s",
-  "grandWinner": "%s is the grand winner!"
+  "grandWinner": "%s is the grand winner!",
+  "line": "**************************"
 }

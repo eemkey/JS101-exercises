@@ -18,24 +18,25 @@ const WINNING_COMBOS = {
   spock: ["rock", "scissors"]
 };
 
-let playerCounter = 0;
-let computerCounter = 0;
-let grandWinner = "";
+let scores = {
+  player: 0,
+  computer: 0
+};
 
 function prompt(msg) {
   console.log(`=> ${MESSAGES[msg]}`);
 }
 
-function validityTest(input) {
+function testForValidInput(input) {
   let validChoicesArr = [].concat(...Object.values(VALID_CHOICES));
   return !validChoicesArr.includes(input);
 }
 
 function isWinner(player1, player2) {
-  return WINNING_COMBOS[convertInput(player1)].includes(player2);
+  return WINNING_COMBOS[convertToValidChoice(player1)].includes(player2);
 }
 
-function convertInput(input) {
+function convertToValidChoice(input) {
   for (let [key, value] of Object.entries(VALID_CHOICES)) {
     if (value.includes(input)) return key;
   }
@@ -46,12 +47,12 @@ function getPlayerChoice() {
   prompt("choose");
   let choice = readline.question().toLowerCase();
 
-  while (validityTest(choice)) {
+  while (testForValidInput(choice)) {
     prompt("invalid");
     prompt("choose");
     choice = readline.question().toLowerCase();
   }
-  return convertInput(choice);
+  return convertToValidChoice(choice);
 }
 
 function getComputerChoice() {
@@ -60,21 +61,15 @@ function getComputerChoice() {
   return choices[randomIdx];
 }
 
-function updateScore(plChoice, compChoice) {
+function updateScore(plChoice, compChoice, score) {
   if (isWinner(plChoice, compChoice)) {
-    playerCounter++;
-    if (playerCounter === ROUNDS_TO_WIN) {
-      grandWinner = "Player";
-    }
+    score.player++;
   } else if (isWinner(compChoice, plChoice)) {
-    computerCounter++;
-    if (computerCounter === ROUNDS_TO_WIN) {
-      grandWinner = "Computer";
-    }
+    score.computer++;
   }
 }
 
-function displayWinner(plChoice, compChoice) {
+function displayWinner(plChoice, compChoice, score) {
   console.log(`=> ${MESSAGES["player"]}, ${MESSAGES["computer"]}`, plChoice, compChoice);
   if (isWinner(plChoice, compChoice)) {
     prompt("playerWin");
@@ -83,27 +78,36 @@ function displayWinner(plChoice, compChoice) {
   } else {
     prompt("compWin");
   }
-  console.log(`=> ${MESSAGES["player"]}, ${MESSAGES["computer"]}`, playerCounter, computerCounter);
-  if (grandWinner.length !== 0) {
-    console.log(`${MESSAGES["grandWinner"]}`, grandWinner);
+  console.log(`=> ${MESSAGES["player"]}, ${MESSAGES["computer"]}`, score.player, score.computer);
+}
+
+function resetScore(score) {
+  score.player = 0;
+  score.computer = 0;
+}
+
+function playGame(score) {
+  let playerChoice = getPlayerChoice();
+  let computerChoice = getComputerChoice();
+  updateScore(playerChoice, computerChoice, score);
+  displayWinner(playerChoice, computerChoice, score);
+  prompt("line");
+}
+
+function isMatchEnded(score) {
+  return (score.player === ROUNDS_TO_WIN) ||
+  (score.computer === ROUNDS_TO_WIN);
+}
+
+function displayGrandWinner(score) {
+  if (score.player === ROUNDS_TO_WIN) {
+    console.log(`${MESSAGES["grandWinner"]}`, "Player");
+  } else {
+    console.log(`${MESSAGES["grandWinner"]}`, "Computer");
   }
 }
 
-function resetScore() {
-  playerCounter = 0;
-  computerCounter = 0;
-  grandWinner = "";
-}
-
-function playGame() {
-  let playerChoice = getPlayerChoice();
-  let computerChoice = getComputerChoice();
-  updateScore(playerChoice, computerChoice);
-  displayWinner(playerChoice, computerChoice);
-  if (grandWinner.length !== 0) resetScore();
-}
-
-function playNewGame() {
+function getPlayAgainAnswer() {
   prompt("playAgain");
   let answer = readline.question().toLowerCase();
 
@@ -112,8 +116,11 @@ function playNewGame() {
     prompt("yesOrNo");
     answer = readline.question().toLowerCase();
   }
-  console.clear();
-  return answer[0] !== "y";
+  return answer;
+}
+
+function isPlayAgain(answer) {
+  return answer === "y";
 }
 
 console.clear();
@@ -121,6 +128,14 @@ prompt("welcome");
 console.log(`${MESSAGES["firstToNum"]}`, ROUNDS_TO_WIN);
 
 while (true) {
-  playGame();
-  if (playNewGame()) break;
+  playGame(scores);
+  if (isMatchEnded(scores)) {
+    displayGrandWinner(scores);
+    if (isPlayAgain(getPlayAgainAnswer())) {
+      resetScore(scores);
+      console.clear();
+    } else {
+      break;
+    }
+  }
 }
