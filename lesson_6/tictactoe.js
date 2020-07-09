@@ -7,6 +7,8 @@ const prompt = msg => {
 };
 
 function displayBoard(board) {
+  console.clear();
+  
   console.log('');
   console.log('     |     |');
   console.log(`  ${board["1"]}  |  ${board["2"]}  |  ${board["3"]}`);
@@ -54,10 +56,21 @@ function computerChoosesSquare(board) {
   board[square] = COMPUTER_MARKER;
 }
 
+function boardFull(board) {
+  return emptySquares(board).length === 0;
+}
+
+function someoneWon(board) {
+  return false;
+}
+
 let board = initalizeBoard();
 displayBoard(board);
 
-playerChoosesSquare(board);
-computerChoosesSquare(board);
-
-displayBoard(board);
+while (true) {
+  playerChoosesSquare(board);
+  computerChoosesSquare(board);
+  displayBoard(board);
+  
+  if (someoneWon(board) || boardFull(board)) break;
+}
