@@ -3,6 +3,11 @@ const INITIAL_MARKER = " ";
 const HUMAN_MARKER = "X";
 const COMPUTER_MARKER = "O";
 const ROUNDS_TO_WIN = 3;
+const WINNING_LINES = [
+  [1, 2, 3], [4, 5, 6], [7, 8, 9],
+  [1, 4, 7], [2, 5, 8], [3, 6, 9],
+  [1, 5, 9], [3, 5, 7]
+];
 
 const prompt = msg => {
   console.log(`=> ${msg}`);
@@ -11,6 +16,7 @@ const prompt = msg => {
 function displayBoard(board) {
   console.clear();
   prompt("Welcome to Tic Tac Toe!");
+  prompt(`First to ${ROUNDS_TO_WIN} is the grand winner.`)
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}.`);
   console.log('');
   console.log('     |     |');
@@ -80,9 +86,31 @@ function playerChoosesSquare(board) {
 }
 
 function computerChoosesSquare(board) {
-  let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
+  let square;
+  for (let index = 0; index < WINNING_LINES.length; index++) {
+    let line = WINNING_LINES[index];
+    square = findAtRiskSquare(line, board, COMPUTER_MARKER);
+    if (square) break;
+  }
+  if(!square) {
+    for (let index = 0; index < WINNING_LINES.length; index++) {
+      let line = WINNING_LINES[index];
+      square = findAtRiskSquare(line, board, HUMAN_MARKER);
+      if (square) break;
+    }
+  }
 
-  let square = emptySquares(board)[randomIndex];
+  if(!square) {
+    if (findSquare5(board)) {
+      square = "5";
+    }
+  }
+
+  if (!square) {
+    let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
+    square = emptySquares(board)[randomIndex];
+  }
+
   board[square] = COMPUTER_MARKER;
 }
 
@@ -90,19 +118,29 @@ function boardFull(board) {
   return emptySquares(board).length === 0;
 }
 
+function findAtRiskSquare(line, board, marker) {
+  let markersInLine = line.map(square => board[square]);
+  if (markersInLine.filter(val => val === marker).length === 2) {
+    let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
+    if (unusedSquare !== undefined) {
+      return unusedSquare;
+    }
+  }
+  return null;
+}
+
+function findSquare5(board) {
+  return emptySquares(board).includes("5");
+  
+}
+
 function someoneWon(board) {
   return !!detectWinner(board);
 }
 
 function detectWinner(board) {
-  let winningLines = [
-    [1, 2, 3], [4, 5, 6], [7, 8, 9],
-    [1, 4, 7], [2, 5, 8], [3, 6, 9],
-    [1, 5, 9], [3, 5, 7]
-  ];
-
-  for (let line = 0; line < winningLines.length; line++) {
-    let [sq1, sq2, sq3] = winningLines[line];
+  for (let line = 0; line < WINNING_LINES.length; line++) {
+    let [sq1, sq2, sq3] = WINNING_LINES[line];
 
     if (
       board[sq1] === HUMAN_MARKER &&
