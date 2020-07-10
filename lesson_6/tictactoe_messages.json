@@ -1,0 +1,11 @@
+{
+  "welcome": "Welcome to Tic Tac Toe!",
+  "roundsToWin": "=> First to %s is the grand winner.",
+  "chooseStarter": "Choose who starts first: player(p) or computer(c).",
+  "invalid": "Sorry, that's not a valid choice.",
+  "tie": "It's a tie!",
+  "grandWinner": "=> %s is the grand winner!",
+  "playAgain": "Play again? (y) or (n)",
+  "bye": "Thanks for playing Tic Tac Toe!",
+  "star": "*********************"
+}

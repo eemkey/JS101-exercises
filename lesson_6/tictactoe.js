@@ -1,17 +1,18 @@
 const readline  = require("readline-sync");
+const MESSAGES = require("./tictactoe_messages.json");
 const INITIAL_MARKER = " ";
 const HUMAN_MARKER = "X";
 const COMPUTER_MARKER = "O";
-const ROUNDS_TO_WIN = 3;
+const ROUNDS_TO_WIN = 5;
 const WINNING_LINES = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9],
   [1, 4, 7], [2, 5, 8], [3, 6, 9],
   [1, 5, 9], [3, 5, 7]
 ];
 
-const prompt = msg => {
-  console.log(`=> ${msg}`);
-};
+function prompt(msg) {
+  console.log(`=> ${MESSAGES[msg]}`);
+}
 
 function displayBoard(board) {
   console.clear();
@@ -67,16 +68,61 @@ function emptySquares(board) {
   return Object.keys(board).filter(key => board[key] === INITIAL_MARKER);
 }
 
+function chooseStartingPlayer() {
+  prompt("chooseStarter");
+  let starter = readline.question().toLowerCase();
+  while ((starter[0] !== "p" && starter[0] !== "c") || starter.length !== 1) {
+    prompt("invalid");
+    prompt("chooseStarter");
+    starter = readline.question().toLowerCase();
+  }
+  return starter;
+}
+
+function chooseSquare(board, currentPlayer) {
+  if (currentPlayer === "p") {
+    playerChoosesSquare(board);
+  } else {
+    computerChoosesSquare(board);
+  }
+}
+
+function alternatePlayer(currentPlayer) {
+  currentPlayer = (currentPlayer === "p") ? "c" : "p";
+  return currentPlayer;
+}
+
 function playerChoosesSquare(board) {
   let square;
   while (true) {
-    prompt(`Choose a square (${joinOr(emptySquares(board))}): `);
+    console.log(`Choose a square (${joinOr(emptySquares(board))}): `);
     square = readline.question().trim();
     if (emptySquares(board).includes(square)) break;
 
-    prompt("Sorry, that's not a valid choice.");
+    prompt("invalid");
   }
   board[square] = HUMAN_MARKER;
+}
+
+function computerChoosesSquare(board) {
+  let square;
+  square = offensiveMove(board);
+
+  if (!square) {
+    square = defensiveMove(board);
+  }
+
+  if (!square) {
+    if (isMiddleSquareEmpty(board)) {
+      square = "5";
+    }
+  }
+
+  if (!square) {
+    let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
+    square = emptySquares(board)[randomIndex];
+  }
+  board[square] = COMPUTER_MARKER;
 }
 
 function offensiveMove(board) {
@@ -99,25 +145,6 @@ function defensiveMove(board) {
   return atRiskSquare;
 }
 
-function computerChoosesSquare(board) {
-  let square;
-  square = offensiveMove(board);
-
-  if (!square) {
-    square = defensiveMove(board);
-  }
-  if (!square) {
-    if (findSquare5(board)) {
-      square = "5";
-    }
-  }
-  if (!square) {
-    let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
-    square = emptySquares(board)[randomIndex];
-  }
-  board[square] = COMPUTER_MARKER;
-}
-
 function boardFull(board) {
   return emptySquares(board).length === 0;
 }
@@ -133,7 +160,7 @@ function findAtRiskSquare(line, board, marker) {
   return null;
 }
 
-function findSquare5(board) {
+function isMiddleSquareEmpty(board) {
   return emptySquares(board).includes("5");
 }
 
@@ -163,11 +190,11 @@ function detectWinner(board) {
 }
 
 function getPlayAgainAnswer() {
-  prompt("Play again? (y or n)");
+  prompt("playAgain");
   let answer = readline.question().toLowerCase();
   while ((answer[0] !== "n" && answer[0] !== "y") || answer.length !== 1) {
-    prompt("Sorry, that's not a valid choice.");
-    prompt("Play again? (y or n)");
+    prompt("invalid");
+    prompt("playAgain");
     answer = readline.question().toLowerCase();
   }
   return answer;
@@ -184,62 +211,33 @@ function isMatchEnded(scores) {
 
 function displayGrandWinner(scores) {
   if (scores.player === ROUNDS_TO_WIN) {
-    console.log("Player is the grand winner!");
+    console.log(`${MESSAGES["grandWinner"]}`, "player");
   } else {
-    console.log("Computer is the grand winner!");
+    console.log(`${MESSAGES["grandWinner"]}`, "computer");
   }
 }
 
-function chooseWhoStartsFirst() {
-  prompt("Choose who starts first: player(p) or computer(c).");
-  let starter = readline.question().toLowerCase();
-  while ((starter[0] !== "p" && starter[0] !== "c") || starter.length !== 1) {
-    prompt("Sorry, that's not a valid choice.");
-    prompt("Please enter (p) or (c).");
-    starter = readline.question().toLowerCase();
-  }
-  return starter;
-}
-
-function chooseSquare(board, currentPlayer) {
-  if (currentPlayer === "p") {
-    playerChoosesSquare(board);
-  } else {
-    computerChoosesSquare(board);
-  }
-}
-
-function alternatePlayer(currentPlayer) {
-  if (currentPlayer === "p") {
-    currentPlayer = "c";
-  } else {
-    currentPlayer = "p";
-  }
-  return currentPlayer;
-}
-
-function announceWinner(board) {
+function displayWinnerOfRound(board) {
   if (someoneWon(board)) {
-    prompt(`${detectWinner(board)} won!`);
+    console.log(`=> ${detectWinner(board)} wins!`);
   } else {
-    prompt("It's a tie!");
+    prompt("tie");
   }
-  console.log("*********************");
+  prompt("star");
   console.log("");
 }
 
 while (true) {
   console.clear();
-  let scores = {
-    player: 0,
-    computer: 0
-  };
-  prompt("Welcome to Tic Tac Toe!");
-  prompt(`First to ${ROUNDS_TO_WIN} is the grand winner.`);
+
+  let scores = { player: 0, computer: 0 };
+
+  prompt("welcome");
+  console.log(`${MESSAGES["roundsToWin"]}`, ROUNDS_TO_WIN);
 
   while (!isMatchEnded(scores)) {
     let board = initalizeBoard();
-    let currentPlayer = chooseWhoStartsFirst();
+    let currentPlayer = chooseStartingPlayer();
 
     while (true) {
       displayBoard(board);
@@ -251,7 +249,7 @@ while (true) {
         displayBoard(board);
         updateScore(scores, detectWinner(board));
         displayScore(scores);
-        announceWinner(board);
+        displayWinnerOfRound(board);
         break;
       }
     }
@@ -266,4 +264,4 @@ while (true) {
   }
 }
 
-prompt("Thanks for playing Tic Tac Toe!");
+prompt("bye");
