@@ -3,7 +3,7 @@ const MESSAGES = require("./tictactoe_messages.json");
 const INITIAL_MARKER = " ";
 const HUMAN_MARKER = "X";
 const COMPUTER_MARKER = "O";
-const ROUNDS_TO_WIN = 1;
+const ROUNDS_TO_WIN = 5;
 const WINNING_LINES = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9],
   [1, 4, 7], [2, 5, 8], [3, 6, 9],
