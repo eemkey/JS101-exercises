@@ -47,7 +47,9 @@ function displayScore(scores) {
 }
 
 function updateScore(scores, winner) {
-  scores[winner]++;
+  if (Object.keys(scores).includes(winner)) {
+    scores[winner]++;
+  }
 }
 
 function joinOr(arr, delimiter = ", ", word = "or") {
@@ -250,6 +252,7 @@ while (true) {
         updateScore(scores, detectWinner(board));
         displayScore(scores);
         displayWinnerOfRound(board);
+        console.log(scores);
         break;
       }
     }
