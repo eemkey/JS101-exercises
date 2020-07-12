@@ -3,7 +3,8 @@ const SUITS = ["H", "S", "D", "C"];
 const VALUES = ["2", "3", "4", "5", "6", "7",
   "8", "9", "10", "J", "Q", "K", "A"];
 
-const TWENTY_ONE = 21;
+const GAME_NUM = 21;
+const DEALER_NUM = 17;
 
 function prompt(msg) {
   console.log(`=> ${msg}`);
@@ -50,8 +51,9 @@ function viewHand(playerHand, dealerHand, showFull = null) {
       console.log(dealerCard);
     }
   } else {
-    console.log(`Dealer: ${calculateTotal([dealerHand[0]])}`);
+    console.log(`Dealer: ${dealerHand[0].includes("A") ? "1 or 11" : calculateTotal([dealerHand[0]])}`);
     console.log(dealerHand[0]);
+    console.log("[ '?', '?' ]");
   }
   console.log("");
 }
@@ -62,7 +64,7 @@ function hit(hand, deck) {
 }
 
 function bust(hand) {
-  return calculateTotal(hand) > TWENTY_ONE;
+  return hand > GAME_NUM;
 }
 
 function calculateTotal(cards) {
@@ -78,21 +80,19 @@ function calculateTotal(cards) {
     return total;
   }, 0);
   values.filter(value => value === "A").forEach(() => {
-    if (total > TWENTY_ONE) {
+    if (total > GAME_NUM) {
       total -= 10;
     }
   });
   return total;
 }
 
-function getWinner(dealerHand, playerHand) {
+function getWinner(dealerTotal, playerTotal) {
   let winner;
-  let dealerTotal = calculateTotal(dealerHand);
-  let playerTotal = calculateTotal(playerHand);
-  if (!bust(playerHand) && (playerTotal > dealerTotal || bust(dealerHand))) {
+  if (!bust(playerTotal) && (playerTotal > dealerTotal || bust(dealerTotal))) {
     winner = "Player";
-  } else if (!bust(dealerHand) &&
-    (playerTotal < dealerTotal || bust(playerHand))) {
+  } else if (!bust(dealerTotal) &&
+    (playerTotal < dealerTotal || bust(playerTotal))) {
     winner = "Dealer";
   } else {
     winner = "tie";
@@ -100,11 +100,11 @@ function getWinner(dealerHand, playerHand) {
   return winner;
 }
 
-function displayWinner(outcome, playerHand, dealerHand) {
-  if (bust(playerHand)) {
-    console.log("Player busted!");
+function displayWinner(outcome, playerTotal, dealerTotal) {
+  if (bust(playerTotal)) {
+    console.log("Player busted! :(");
   }
-  if (bust(dealerHand)) {
+  if (bust(dealerTotal)) {
     console.log("Dealer busted!");
   }
   if (outcome === "Player" || outcome === "Dealer") {
@@ -146,21 +146,25 @@ while (true) {
   let deck = makeNewShuffledDeck();
   let playerHand = makeHand(deck);
   let dealerHand = makeHand(deck);
+  let dealerTotal = calculateTotal(dealerHand);
+  let playerTotal = calculateTotal(playerHand);
   viewHand(playerHand, dealerHand);
 
   while (true) {
     let answer = getHitOrStayAnswer();
     if (answer === "h") {
       hit(playerHand, deck);
+      playerTotal = calculateTotal(playerHand);
       console.clear();
       viewHand(playerHand, dealerHand);
     }
-    if ((answer === "s") || bust(playerHand)) break;
+    if ((answer === "s") || bust(playerTotal)) break;
   }
 
-  while (calculateTotal(dealerHand) < 17) {
-    if (bust(playerHand) || bust(dealerHand)) break;
+  while (dealerTotal < DEALER_NUM) {
+    if (bust(playerTotal) || bust(dealerTotal)) break;
     hit(dealerHand, deck);
+    dealerTotal = calculateTotal(dealerHand);
     console.clear();
     viewHand(playerHand, dealerHand);
   }
@@ -168,8 +172,10 @@ while (true) {
   console.clear();
   viewHand(playerHand, dealerHand, "fullHand");
 
-  let outcome = getWinner(dealerHand, playerHand);
-  displayWinner(outcome, playerHand, dealerHand);
+  let outcome = getWinner(dealerTotal, playerTotal);
+  displayWinner(outcome, playerTotal, dealerTotal);
 
   if (!isPlayAgain(getPlayAgainAnswer())) break;
 }
+
+prompt("Thanks for playing!");
