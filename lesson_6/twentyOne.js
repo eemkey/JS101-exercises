@@ -5,6 +5,7 @@ const VALUES = ["2", "3", "4", "5", "6", "7",
 
 const GAME_NUM = 21;
 const DEALER_NUM = 17;
+const ROUNDS_TO_WIN = 5;
 
 function prompt(msg) {
   console.log(`=> ${msg}`);
@@ -115,11 +116,12 @@ function displayWinner(outcome, playerTotal, dealerTotal) {
 }
 
 function getPlayAgainAnswer() {
+  console.log("");
   prompt("Would you like to play again? (y/n)");
   let answer = readline.question().toLowerCase();
   while ((answer[0] !== "n" && answer[0] !== "y") || answer.length !== 1) {
     prompt("Sorry, invalid answer.");
-    prompt("Would you like to play again? (y/n)");
+    prompt("Please type (y) or (n).");
     answer = readline.question().toLowerCase();
   }
   return answer;
@@ -134,47 +136,89 @@ function getHitOrStayAnswer() {
   let answer = readline.question().toLowerCase();
   while ((answer[0] !== "h" && answer[0] !== "s") || answer.length !== 1) {
     prompt("Invalid answer.");
-    prompt("Do you want to hit (h) or stay (s)?");
+    prompt("Please type (h) or (s).");
     answer = readline.question().toLowerCase();
   }
   return answer;
 }
 
+function updateScore(scores, winner) {
+  if (Object.keys(scores).includes(winner)) {
+    scores[winner]++;
+  }
+}
+
+function isMatchEnded(scores) {
+  return (scores.Player === ROUNDS_TO_WIN) ||
+  (scores.Dealer === ROUNDS_TO_WIN);
+}
+
+function displayGrandWinner(scores) {
+  if (scores.player === ROUNDS_TO_WIN) {
+    console.log("The grand winner is Player!");
+  } else {
+    console.log("The grand winner is Dealer!");
+  }
+}
+
+function displayScores(scores) {
+  console.log(`Player: ${scores.Player} | Dealer: ${scores.Dealer}`)
+  console.log("");
+}
+
+function pressToContinue() {
+  console.log("");
+  prompt("Please press enter to continue");
+  readline.question();
+}
+
 while (true) {
   console.clear();
-  prompt("Welcome to Twenty One!");
-  let deck = makeNewShuffledDeck();
-  let playerHand = makeHand(deck);
-  let dealerHand = makeHand(deck);
-  let dealerTotal = calculateTotal(dealerHand);
-  let playerTotal = calculateTotal(playerHand);
-  viewHand(playerHand, dealerHand);
+  prompt("Welcome to Twenty-One!");
+  prompt(`First to reach ${ROUNDS_TO_WIN} wins is the grand winner!`)
+  const scores = { Player: 0, Dealer: 0 };
 
-  while (true) {
-    let answer = getHitOrStayAnswer();
-    if (answer === "h") {
-      hit(playerHand, deck);
-      playerTotal = calculateTotal(playerHand);
+  while (!isMatchEnded(scores)) {
+    let deck = makeNewShuffledDeck();
+    let playerHand = makeHand(deck);
+    let dealerHand = makeHand(deck);
+    let dealerTotal = calculateTotal(dealerHand);
+    let playerTotal = calculateTotal(playerHand);
+    viewHand(playerHand, dealerHand);
+    displayScores(scores)
+
+    while (true) {
+      let answer = getHitOrStayAnswer();
+      if (answer === "h") {
+        hit(playerHand, deck);
+        playerTotal = calculateTotal(playerHand);
+        console.clear();
+        viewHand(playerHand, dealerHand);
+        displayScores(scores)
+      }
+      if ((answer === "s") || bust(playerTotal)) break;
+    }
+
+    while (dealerTotal < DEALER_NUM) {
+      if (bust(playerTotal) || bust(dealerTotal)) break;
+      hit(dealerHand, deck);
+      dealerTotal = calculateTotal(dealerHand);
       console.clear();
       viewHand(playerHand, dealerHand);
     }
-    if ((answer === "s") || bust(playerTotal)) break;
-  }
 
-  while (dealerTotal < DEALER_NUM) {
-    if (bust(playerTotal) || bust(dealerTotal)) break;
-    hit(dealerHand, deck);
-    dealerTotal = calculateTotal(dealerHand);
     console.clear();
-    viewHand(playerHand, dealerHand);
+    viewHand(playerHand, dealerHand, "fullHand");
+
+    let outcome = getWinner(dealerTotal, playerTotal);
+    updateScore(scores, outcome);
+    displayScores(scores)
+    displayWinner(outcome, playerTotal, dealerTotal);
+    pressToContinue();
+    console.clear();
   }
-
-  console.clear();
-  viewHand(playerHand, dealerHand, "fullHand");
-
-  let outcome = getWinner(dealerTotal, playerTotal);
-  displayWinner(outcome, playerTotal, dealerTotal);
-
+  displayScores(scores)
+  displayGrandWinner(scores);
   if (!isPlayAgain(getPlayAgainAnswer())) break;
 }
 
