@@ -1,4 +1,5 @@
 const readline = require("readline-sync");
+const MESSAGES = require("./twentyOne_messages.json");
 const SUITS = ["H", "S", "D", "C"];
 const VALUES = ["2", "3", "4", "5", "6", "7",
   "8", "9", "10", "J", "Q", "K", "A"];
@@ -6,9 +7,11 @@ const VALUES = ["2", "3", "4", "5", "6", "7",
 const GAME_NUM = 21;
 const DEALER_NUM = 17;
 const ROUNDS_TO_WIN = 5;
+const PLAYER = "Player";
+const DEALER = "Dealer";
 
 function prompt(msg) {
-  console.log(`=> ${msg}`);
+  console.log(`=> ${MESSAGES[msg]}`);
 }
 
 function makeNewShuffledDeck() {
@@ -41,18 +44,18 @@ function makeHand(deck) {
 
 function viewHand(playerHand, dealerHand, showFull = null) {
   console.log("");
-  console.log(`Player: ${calculateTotal(playerHand)}`);
+  console.log(`${PLAYER}: ${calculateTotal(playerHand)}`);
   for (let playerCard of playerHand) {
     console.log(playerCard);
   }
   console.log("");
   if (showFull) {
-    console.log(`Dealer: ${calculateTotal(dealerHand)}`);
+    console.log(`${DEALER}: ${calculateTotal(dealerHand)}`);
     for (let dealerCard of dealerHand) {
       console.log(dealerCard);
     }
   } else {
-    console.log(`Dealer: ${dealerHand[0].includes("A") ? "1 or 11" : calculateTotal([dealerHand[0]])}`);
+    console.log(`${DEALER}: ${dealerHand[0].includes("A") ? "1 or 11" : calculateTotal([dealerHand[0]])}`);
     console.log(dealerHand[0]);
     console.log("[ '?', '?' ]");
   }
@@ -91,10 +94,10 @@ function calculateTotal(cards) {
 function getWinner(dealerTotal, playerTotal) {
   let winner;
   if (!bust(playerTotal) && (playerTotal > dealerTotal || bust(dealerTotal))) {
-    winner = "Player";
+    winner = PLAYER;
   } else if (!bust(dealerTotal) &&
     (playerTotal < dealerTotal || bust(playerTotal))) {
-    winner = "Dealer";
+    winner = DEALER;
   } else {
     winner = "tie";
   }
@@ -103,25 +106,25 @@ function getWinner(dealerTotal, playerTotal) {
 
 function displayWinner(outcome, playerTotal, dealerTotal) {
   if (bust(playerTotal)) {
-    console.log("Player busted! :(");
+    console.log(`${MESSAGES["busted"]}`, PLAYER);
   }
   if (bust(dealerTotal)) {
-    console.log("Dealer busted!");
+    console.log(`${MESSAGES["busted"]}`, DEALER);
   }
-  if (outcome === "Player" || outcome === "Dealer") {
-    console.log(`The winner is: ${outcome}`);
+  if (outcome === PLAYER || outcome === DEALER) {
+    console.log(`${MESSAGES["winner"]}`, outcome);
   } else {
-    console.log(`It's a ${outcome}!`);
+    console.log(`${MESSAGES["tie"]}`, outcome);
   }
 }
 
 function getPlayAgainAnswer() {
   console.log("");
-  prompt("Would you like to play again? (y/n)");
+  prompt("playAgain");
   let answer = readline.question().toLowerCase();
   while ((answer[0] !== "n" && answer[0] !== "y") || answer.length !== 1) {
-    prompt("Sorry, invalid answer.");
-    prompt("Please type (y) or (n).");
+    prompt("invalid");
+    prompt("playAgain");
     answer = readline.question().toLowerCase();
   }
   return answer;
@@ -132,17 +135,17 @@ function isPlayAgain(answer) {
 }
 
 function getHitOrStayAnswer() {
-  prompt("Do you want to hit (h) or stay (s)?");
+  prompt("hitOrStay");
   let answer = readline.question().toLowerCase();
   while ((answer[0] !== "h" && answer[0] !== "s") || answer.length !== 1) {
-    prompt("Invalid answer.");
-    prompt("Please type (h) or (s).");
+    prompt("invalid");
+    prompt("hitOrStay");
     answer = readline.question().toLowerCase();
   }
   return answer;
 }
 
-function updateScore(scores, winner) {
+function updateScores(scores, winner) {
   if (Object.keys(scores).includes(winner)) {
     scores[winner]++;
   }
@@ -154,28 +157,28 @@ function isMatchEnded(scores) {
 }
 
 function displayGrandWinner(scores) {
-  if (scores.player === ROUNDS_TO_WIN) {
-    console.log("The grand winner is Player!");
+  if (scores.Player === ROUNDS_TO_WIN) {
+    console.log(`${MESSAGES["grandWinner"]}`, PLAYER);
   } else {
-    console.log("The grand winner is Dealer!");
+    console.log(`${MESSAGES["grandWinner"]}`, DEALER);
   }
 }
 
 function displayScores(scores) {
-  console.log(`Player: ${scores.Player} | Dealer: ${scores.Dealer}`)
+  console.log(`${PLAYER}: ${scores.Player} | ${DEALER}: ${scores.Dealer}`);
   console.log("");
 }
 
 function pressToContinue() {
   console.log("");
-  prompt("Please press enter to continue");
+  prompt("continue");
   readline.question();
 }
 
 while (true) {
   console.clear();
-  prompt("Welcome to Twenty-One!");
-  prompt(`First to reach ${ROUNDS_TO_WIN} wins is the grand winner!`)
+  prompt("welcome");
+  console.log(`${MESSAGES["roundsToWin"]}`, ROUNDS_TO_WIN);
   const scores = { Player: 0, Dealer: 0 };
 
   while (!isMatchEnded(scores)) {
@@ -185,7 +188,7 @@ while (true) {
     let dealerTotal = calculateTotal(dealerHand);
     let playerTotal = calculateTotal(playerHand);
     viewHand(playerHand, dealerHand);
-    displayScores(scores)
+    displayScores(scores);
 
     while (true) {
       let answer = getHitOrStayAnswer();
@@ -194,7 +197,7 @@ while (true) {
         playerTotal = calculateTotal(playerHand);
         console.clear();
         viewHand(playerHand, dealerHand);
-        displayScores(scores)
+        displayScores(scores);
       }
       if ((answer === "s") || bust(playerTotal)) break;
     }
@@ -211,15 +214,15 @@ while (true) {
     viewHand(playerHand, dealerHand, "fullHand");
 
     let outcome = getWinner(dealerTotal, playerTotal);
-    updateScore(scores, outcome);
-    displayScores(scores)
+    updateScores(scores, outcome);
+    displayScores(scores);
     displayWinner(outcome, playerTotal, dealerTotal);
     pressToContinue();
     console.clear();
   }
-  displayScores(scores)
+  displayScores(scores);
   displayGrandWinner(scores);
   if (!isPlayAgain(getPlayAgainAnswer())) break;
 }
 
-prompt("Thanks for playing!");
+prompt("bye");

@@ -1,0 +1,13 @@
+{
+  "welcome": "Welcome to Twenty-One!",
+  "roundsToWin": "=> First to reach %s wins is the grand winner!",
+  "hitOrStay": "Do you want to hit or stay? Please type 'h' or 's'.",
+  "invalid": "Sorry, invalid answer.",
+  "continue": "Please press enter to continue.",
+  "busted": "=> %s busted!",
+  "winner": "=> The winner is: %s!",
+  "grandWinner": "=> The grand winner is %s!",
+  "tie": "=> It's a %s!",
+  "playAgain": "Would you like to play again? Please type 'y' or 'n'.",
+  "bye": "Thanks for playing!"
+}
