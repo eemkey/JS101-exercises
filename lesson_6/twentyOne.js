@@ -1,6 +1,8 @@
 const readline = require("readline-sync");
 const SUITS = ["H", "S", "D", "C"];
-const VALUES = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+const VALUES = ["2", "3", "4", "5", "6", "7",
+  "8", "9", "10", "J", "Q", "K", "A"];
+
 const TWENTY_ONE = 21;
 
 function prompt(msg) {
@@ -36,12 +38,12 @@ function makeHand(deck) {
 }
 
 function viewHand(playerHand, dealerHand, showFull = null) {
-  console.log("")
+  console.log("");
   console.log(`Player: ${calculateTotal(playerHand)}`);
   for (let playerCard of playerHand) {
     console.log(playerCard);
   }
-  console.log("")
+  console.log("");
   if (showFull) {
     console.log(`Dealer: ${calculateTotal(dealerHand)}`);
     for (let dealerCard of dealerHand) {
@@ -51,7 +53,7 @@ function viewHand(playerHand, dealerHand, showFull = null) {
     console.log(`Dealer: ${calculateTotal([dealerHand[0]])}`);
     console.log(dealerHand[0]);
   }
-  console.log("")
+  console.log("");
 }
 
 function hit(hand, deck) {
@@ -83,13 +85,14 @@ function calculateTotal(cards) {
   return total;
 }
 
-function getWinner(dealerHand, playerHand) { 
+function getWinner(dealerHand, playerHand) {
   let winner;
   let dealerTotal = calculateTotal(dealerHand);
   let playerTotal = calculateTotal(playerHand);
   if (!bust(playerHand) && (playerTotal > dealerTotal || bust(dealerHand))) {
-    winner  = "Player";
-  } else if (!bust(dealerHand) && ( playerTotal < dealerTotal || bust(playerHand))) {
+    winner = "Player";
+  } else if (!bust(dealerHand) &&
+    (playerTotal < dealerTotal || bust(playerHand))) {
     winner = "Dealer";
   } else {
     winner = "tie";
@@ -100,7 +103,7 @@ function getWinner(dealerHand, playerHand) {
 function displayWinner(outcome, playerHand, dealerHand) {
   if (bust(playerHand)) {
     console.log("Player busted!");
-  } 
+  }
   if (bust(dealerHand)) {
     console.log("Dealer busted!");
   }
@@ -157,11 +160,9 @@ while (true) {
 
   while (calculateTotal(dealerHand) < 17) {
     if (bust(playerHand) || bust(dealerHand)) break;
-    prompt("Dealer is playing...");
     hit(dealerHand, deck);
     console.clear();
     viewHand(playerHand, dealerHand);
-
   }
 
   console.clear();
