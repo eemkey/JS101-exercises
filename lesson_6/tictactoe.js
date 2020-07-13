@@ -2,7 +2,9 @@ const readline  = require("readline-sync");
 const MESSAGES = require("./tictactoe_messages.json");
 const INITIAL_MARKER = " ";
 const HUMAN_MARKER = "X";
+const STARTING_PLAYERS = ["p", "player", "c", "computer"];
 const COMPUTER_MARKER = "O";
+const MIDDLE_SQUARE = "5";
 const ROUNDS_TO_WIN = 5;
 const WINNING_LINES = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9],
@@ -73,12 +75,12 @@ function emptySquares(board) {
 function chooseStartingPlayer() {
   prompt("chooseStarter");
   let starter = readline.question().toLowerCase();
-  while ((starter[0] !== "p" && starter[0] !== "c") || starter.length !== 1) {
+  while (!STARTING_PLAYERS.includes(starter)) {
     prompt("invalid");
     prompt("chooseStarter");
     starter = readline.question().toLowerCase();
   }
-  return starter;
+  return starter[0];
 }
 
 function chooseSquare(board, currentPlayer) {
@@ -90,8 +92,7 @@ function chooseSquare(board, currentPlayer) {
 }
 
 function alternatePlayer(currentPlayer) {
-  currentPlayer = (currentPlayer === "p") ? "c" : "p";
-  return currentPlayer;
+  return currentPlayer === "p" ? "c" : "p";
 }
 
 function playerChoosesSquare(board) {
@@ -108,40 +109,35 @@ function playerChoosesSquare(board) {
 
 function computerChoosesSquare(board) {
   let square;
-  square = offensiveMove(board);
+  square = computerMove(board, COMPUTER_MARKER);
 
   if (!square) {
-    square = defensiveMove(board);
+    square = computerMove(board, HUMAN_MARKER);
   }
 
   if (!square) {
     if (isMiddleSquareEmpty(board)) {
-      square = "5";
+      square = MIDDLE_SQUARE;
     }
   }
 
   if (!square) {
-    let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
-    square = emptySquares(board)[randomIndex];
+    square = chooseRandomSquare(board);
   }
   board[square] = COMPUTER_MARKER;
 }
 
-function offensiveMove(board) {
-  let atRiskSquare;
-  for (let index = 0; index < WINNING_LINES.length; index++) {
-    let line = WINNING_LINES[index];
-    atRiskSquare = findAtRiskSquare(line, board, COMPUTER_MARKER);
-    if (atRiskSquare) break;
-  }
-  return atRiskSquare;
+function chooseRandomSquare(board) {
+  let randomIdx = Math.floor(Math.random() * emptySquares(board).length);
+  let square = emptySquares(board)[randomIdx];
+  return square;
 }
 
-function defensiveMove(board) {
+function computerMove(board, marker) {
   let atRiskSquare;
   for (let index = 0; index < WINNING_LINES.length; index++) {
     let line = WINNING_LINES[index];
-    atRiskSquare = findAtRiskSquare(line, board, HUMAN_MARKER);
+    atRiskSquare = findAtRiskSquare(line, board, marker);
     if (atRiskSquare) break;
   }
   return atRiskSquare;
@@ -163,7 +159,7 @@ function findAtRiskSquare(line, board, marker) {
 }
 
 function isMiddleSquareEmpty(board) {
-  return emptySquares(board).includes("5");
+  return emptySquares(board).includes(MIDDLE_SQUARE);
 }
 
 function someoneWon(board) {
@@ -194,6 +190,7 @@ function detectWinner(board) {
 function getPlayAgainAnswer() {
   prompt("playAgain");
   let answer = readline.question().toLowerCase();
+  
   while ((answer[0] !== "n" && answer[0] !== "y") || answer.length !== 1) {
     prompt("invalid");
     prompt("playAgain");
@@ -252,7 +249,6 @@ while (true) {
         updateScore(scores, detectWinner(board));
         displayScore(scores);
         displayWinnerOfRound(board);
-        console.log(scores);
         break;
       }
     }
