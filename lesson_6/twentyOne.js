@@ -7,6 +7,7 @@ const VALUES = ["2", "3", "4", "5", "6", "7",
 const GAME_NUM = 21;
 const DEALER_NUM = 17;
 const ROUNDS_TO_WIN = 5;
+const OPTIONS = ["hit", "h", "stay", "s"];
 const PLAYER = "Player";
 const DEALER = "Dealer";
 
@@ -137,12 +138,12 @@ function isPlayAgain(answer) {
 function getHitOrStayAnswer() {
   prompt("hitOrStay");
   let answer = readline.question().toLowerCase();
-  while ((answer[0] !== "h" && answer[0] !== "s") || answer.length !== 1) {
+  while (!OPTIONS.includes(answer)) {
     prompt("invalid");
     prompt("hitOrStay");
     answer = readline.question().toLowerCase();
   }
-  return answer;
+  return answer[0];
 }
 
 function updateScores(scores, winner) {

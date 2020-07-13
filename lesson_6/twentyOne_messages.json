@@ -1,7 +1,7 @@
 {
   "welcome": "Welcome to Twenty-One!",
   "roundsToWin": "=> First to reach %s wins is the grand winner!",
-  "hitOrStay": "Do you want to hit or stay? Please type 'h' or 's'.",
+  "hitOrStay": "Do you want to hit (h) or stay (s)?",
   "invalid": "Sorry, invalid answer.",
   "continue": "Please press enter to continue.",
   "busted": "=> %s busted!",
