@@ -191,7 +191,7 @@ while (true) {
     viewHand(playerHand, dealerHand);
     displayScores(scores);
 
-    while (true) {
+    while (playerTotal !== 21) {
       let answer = getHitOrStayAnswer();
       if (answer === "h") {
         hit(playerHand, deck);
