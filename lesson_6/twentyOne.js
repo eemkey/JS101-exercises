@@ -1,6 +1,6 @@
 const readline = require("readline-sync");
 const MESSAGES = require("./twentyOne_messages.json");
-const SUITS = ["H", "S", "D", "C"];
+const SUITS = ["♥", "♠", "♦", "♣"];
 const VALUES = ["2", "3", "4", "5", "6", "7",
   "8", "9", "10", "J", "Q", "K", "A"];
 
@@ -17,10 +17,11 @@ function prompt(msg) {
 
 function makeNewShuffledDeck() {
   let deck = [];
-  let card;
   for (let suit of SUITS) {
     for (let value of VALUES) {
-      card = [suit, value];
+      let card = {};
+      card.suit = suit;
+      card.value = value;
       deck.push(card);
     }
   }
@@ -43,24 +44,27 @@ function makeHand(deck) {
   return hand;
 }
 
-function viewHand(playerHand, dealerHand, showFull = null) {
-  console.log("");
-  console.log(`${PLAYER}: ${calculateTotal(playerHand)}`);
-  for (let playerCard of playerHand) {
-    console.log(playerCard);
-  }
-  console.log("");
-  if (showFull) {
-    console.log(`${DEALER}: ${calculateTotal(dealerHand)}`);
-    for (let dealerCard of dealerHand) {
-      console.log(dealerCard);
-    }
+function displayCalculatedHandTotal(total, hand) {
+  if (hand) {
+    let values = hand.map(card => card.value);
+    console.log(`total: ${values.includes("A") ? "1 or 11" : calculateTotal([hand[0]])}`);
   } else {
-    console.log(`${DEALER}: ${dealerHand[0].includes("A") ? "1 or 11" : calculateTotal([dealerHand[0]])}`);
-    console.log(dealerHand[0]);
-    console.log("[ '?', '?' ]");
+    console.log(`total: ${total}`);
   }
+}
+
+function displayHand(hand, person, showOneCard) {
   console.log("");
+  console.log(`${person} hand`);
+  console.log("-----------");
+  if (showOneCard) {
+    console.log(`${hand[0].suit} ${hand[0].value}`);
+    console.log("? ?");
+  } else {
+    for (let card of hand) {
+      console.log(`${card.suit} ${card.value}`);
+    }
+  }
 }
 
 function hit(hand, deck) {
@@ -68,12 +72,13 @@ function hit(hand, deck) {
   return hand;
 }
 
-function bust(hand) {
+function isBust(hand) {
   return hand > GAME_NUM;
 }
 
 function calculateTotal(cards) {
-  let values = cards.map(card => card[1]);
+  let values = cards.map(card => card.value);
+
   let total = values.reduce((total, currVal) => {
     if (currVal === "A") {
       total += 11;
@@ -84,6 +89,10 @@ function calculateTotal(cards) {
     }
     return total;
   }, 0);
+  return adjustTotalForAces(values, total);
+}
+
+function adjustTotalForAces(values, total) {
   values.filter(value => value === "A").forEach(() => {
     if (total > GAME_NUM) {
       total -= 10;
@@ -94,10 +103,11 @@ function calculateTotal(cards) {
 
 function getWinner(dealerTotal, playerTotal) {
   let winner;
-  if (!bust(playerTotal) && (playerTotal > dealerTotal || bust(dealerTotal))) {
+  if (!isBust(playerTotal) &&
+  (playerTotal > dealerTotal || isBust(dealerTotal))) {
     winner = PLAYER;
-  } else if (!bust(dealerTotal) &&
-    (playerTotal < dealerTotal || bust(playerTotal))) {
+  } else if (!isBust(dealerTotal) &&
+    (playerTotal < dealerTotal || isBust(playerTotal))) {
     winner = DEALER;
   } else {
     winner = "tie";
@@ -106,10 +116,10 @@ function getWinner(dealerTotal, playerTotal) {
 }
 
 function displayWinner(outcome, playerTotal, dealerTotal) {
-  if (bust(playerTotal)) {
+  if (isBust(playerTotal)) {
     console.log(`${MESSAGES["busted"]}`, PLAYER);
   }
-  if (bust(dealerTotal)) {
+  if (isBust(dealerTotal)) {
     console.log(`${MESSAGES["busted"]}`, DEALER);
   }
   if (outcome === PLAYER || outcome === DEALER) {
@@ -165,7 +175,10 @@ function displayGrandWinner(scores) {
   }
 }
 
-function displayScores(scores) {
+function displayRoundScores(scores) {
+  console.log("");
+  console.log("Scores");
+  console.log("---------------------");
   console.log(`${PLAYER}: ${scores.Player} | ${DEALER}: ${scores.Dealer}`);
   console.log("");
 }
@@ -188,8 +201,11 @@ while (true) {
     let dealerHand = makeHand(deck);
     let dealerTotal = calculateTotal(dealerHand);
     let playerTotal = calculateTotal(playerHand);
-    viewHand(playerHand, dealerHand);
-    displayScores(scores);
+    displayHand(playerHand, PLAYER);
+    displayCalculatedHandTotal(playerTotal);
+    displayHand(dealerHand, DEALER, "showOneCard");
+    displayCalculatedHandTotal(dealerTotal, dealerHand);
+    displayRoundScores(scores);
 
     while (playerTotal !== GAME_NUM) {
       let answer = getHitOrStayAnswer();
@@ -197,31 +213,39 @@ while (true) {
         hit(playerHand, deck);
         playerTotal = calculateTotal(playerHand);
         console.clear();
-        viewHand(playerHand, dealerHand);
-        displayScores(scores);
+        displayHand(playerHand, PLAYER);
+        displayCalculatedHandTotal(playerTotal);
+        displayHand(dealerHand, DEALER, "showOneCard");
+        displayCalculatedHandTotal(dealerTotal, dealerHand);
+        displayRoundScores(scores);
       }
-      if ((answer === "s") || bust(playerTotal)) break;
+      if ((answer === "s") || isBust(playerTotal)) break;
     }
 
     while (dealerTotal < DEALER_NUM) {
-      if (bust(playerTotal) || bust(dealerTotal)) break;
+      if (isBust(playerTotal) || isBust(dealerTotal)) break;
       hit(dealerHand, deck);
       dealerTotal = calculateTotal(dealerHand);
       console.clear();
-      viewHand(playerHand, dealerHand);
+      displayHand(playerHand, PLAYER);
+      displayCalculatedHandTotal(playerTotal);
+      displayHand(dealerHand, DEALER, "showOneCard");
+      displayCalculatedHandTotal(dealerTotal, dealerHand);
     }
 
     console.clear();
-    viewHand(playerHand, dealerHand, "fullHand");
-
+    displayHand(playerHand, PLAYER);
+    displayCalculatedHandTotal(playerTotal);
+    displayHand(dealerHand, DEALER);
+    displayCalculatedHandTotal(dealerTotal);
     let outcome = getWinner(dealerTotal, playerTotal);
     updateScores(scores, outcome);
-    displayScores(scores);
+    displayRoundScores(scores);
     displayWinner(outcome, playerTotal, dealerTotal);
     pressToContinue();
     console.clear();
   }
-  displayScores(scores);
+  displayRoundScores(scores);
   displayGrandWinner(scores);
   if (!isPlayAgain(getPlayAgainAnswer())) break;
 }
