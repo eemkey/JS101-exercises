@@ -7,7 +7,7 @@
 //loop through first array
 //for each iteration, multiply element from first array at current index with element from 2nd array at current index. 
 //push this result in multipliedNumsArr
-//return mltipledNumsArr
+//return multipledNumsArr
 
 function multiplyList(arr1, arr2) {
   let multipliedNumsArr = [];
