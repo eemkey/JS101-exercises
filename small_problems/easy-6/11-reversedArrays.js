@@ -4,7 +4,7 @@
 function reverse(arr) {
   let leftIdx = 0;
   let rightIdx = arr.length - 1;
-  while (leftIdx < arr.length / 2) {
+  while (leftIdx < Math.floor(arr.length / 2)) {
       [arr[leftIdx], arr[rightIdx]] = [arr[rightIdx], arr[leftIdx]];
     leftIdx++;
     rightIdx--;

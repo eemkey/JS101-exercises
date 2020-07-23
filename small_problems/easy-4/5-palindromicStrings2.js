@@ -1,5 +1,5 @@
 function isRealPalindrome(str) {
-  let newStr = str.toLowerCase().replace(/[^\w_]/g, "");
+  let newStr = str.toLowerCase().replace(/[^a-z0-9]/g, "");
   return newStr === newStr.split("").reverse().join("");
 }
 
