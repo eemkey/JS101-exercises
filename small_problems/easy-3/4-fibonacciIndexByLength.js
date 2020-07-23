@@ -3,7 +3,6 @@
 //output: index of Fibonacci number
 
 function findFibonacciIndexByLength(numOfDigits) {
-  let arr = [1, 1];
   let first = 1;
   let second = 1;
   let idx = 2;
@@ -18,5 +17,5 @@ function findFibonacciIndexByLength(numOfDigits) {
 }
 
 console.log(findFibonacciIndexByLength(2));       // 7
-findFibonacciIndexByLength(10);      // 45
-findFibonacciIndexByLength(16);      // 74
+console.log(findFibonacciIndexByLength(10));      // 45
+console.log(findFibonacciIndexByLength(16));      // 74

@@ -23,7 +23,8 @@
 
 function century(num) {
   let centuryNum = Math.ceil(num / 100);
-  if (centuryNum % 100 === 11 || centuryNum % 100 === 12 || centuryNum % 100 === 13) {
+  lastTwoNums = centuryNum % 100;
+  if (lastTwoNums === 11 || lastTwoNums === 12 || lastTwoNums === 13) {
     return `${centuryNum}th`;
   } else {
     let lastNum = centuryNum % 10;

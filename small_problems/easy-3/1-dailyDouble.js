@@ -12,15 +12,23 @@
 //if current character is different than the previous character, then push current character into newArr.
 //return newArr and convert back to string
 
+//using forEach
+// function crunch(str) {
+//   let newArr = [];
+//   let splitStr = str.split("");
+//   splitStr.forEach((val, idx)=> {
+//     if (val !== splitStr[idx - 1]) {
+//       newArr.push(val);
+//     }
+//   });
+//   return newArr.join("");
+// }
+
+//using filter
 function crunch(str) {
-  let newArr = [];
-  let splitStr = str.split("");
-  splitStr.forEach((val, idx)=> {
-    if (val !== splitStr[idx - 1]) {
-      newArr.push(val);
-    }
+  return str.split("").filter((char, idx) => {
+    return char !== str[idx - 1];
   });
-  return newArr.join("");
 }
 
 function regexCrunch(str) {
