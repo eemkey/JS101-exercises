@@ -76,33 +76,47 @@ while idx is greater than num / 2 rounded down,
   decrease outerSpaces by 1, and increase innerSpaces by 1.
 */
 
+// function star(num) {
+//   let outerSpaces = 0;
+//   let innerSpaces = (num - 3) / 2;
+//   let idx = 0;
+//   let middleIdx = Math.floor(num / 2);
+//   while (idx < middleIdx) {
+//     console.log(" ".repeat(outerSpaces) + "*" + " ".repeat(innerSpaces) + "*" + " ".repeat(innerSpaces) + "*")
+//     outerSpaces += 1;
+//     innerSpaces -= 1;
+//     idx += 1;
+//   }
+
+//   if (idx === middleIdx) {
+//     console.log("*".repeat(num));
+//     outerSpaces -= 1;
+//     innerSpaces += 1;
+//     idx += 1;
+//   }
+
+//   while (idx > middleIdx && idx < num) {
+//     console.log(" ".repeat(outerSpaces) + "*" + " ".repeat(innerSpaces) + "*" + " ".repeat(innerSpaces) + "*")
+//     outerSpaces -= 1;
+//     innerSpaces += 1;
+//     idx += 1;
+//   }
+// }
+
+//refactored: 
 function star(num) {
-  let outerSpaces = 0;
-  let innerSpaces = (num - 3) / 2;
-  let idx = 0;
+  let spaces = (num - 3) / 2;
   let middleIdx = Math.floor(num / 2);
-  while (idx < middleIdx) {
-    console.log(" ".repeat(outerSpaces) + "*" + " ".repeat(innerSpaces) + "*" + " ".repeat(innerSpaces) + "*")
-    outerSpaces += 1;
-    innerSpaces -= 1;
-    idx += 1;
+  for (let idx = 0; idx < middleIdx; idx++) {
+    console.log(" ".repeat(idx) + "*" + " ".repeat(spaces - idx) + "*" + " ".repeat(spaces - idx) + "*")
   }
 
-  if (idx === middleIdx) {
     console.log("*".repeat(num));
-    outerSpaces -= 1;
-    innerSpaces += 1;
-    idx += 1;
-  }
 
-  while (idx > middleIdx && idx < num) {
-    console.log(" ".repeat(outerSpaces) + "*" + " ".repeat(innerSpaces) + "*" + " ".repeat(innerSpaces) + "*")
-    outerSpaces -= 1;
-    innerSpaces += 1;
-    idx += 1;
+  for (let idx = 0; idx < middleIdx; idx++) {
+    console.log(" ".repeat(spaces - idx) + "*" + " ".repeat(idx) + "*" + " ".repeat(idx) + "*")
   }
 }
-
 
 console.log(star(7));
 // logs

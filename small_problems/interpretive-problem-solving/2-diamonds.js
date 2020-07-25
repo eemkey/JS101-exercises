@@ -109,7 +109,7 @@ rules:
 ///NEED TO REFACTOR/REDO!!!
 function hollowDiamond(num) {
   let firstSpaces;
-  let secondSpaces = -1;
+  let secondSpaces;
   let star = 1;
   
   for (let idx = 0; idx < num; idx++) {

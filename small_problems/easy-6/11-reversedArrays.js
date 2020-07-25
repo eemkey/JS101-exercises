@@ -12,6 +12,15 @@ function reverse(arr) {
   return arr;
 }
 
+//Marcus's solution:
+// function reverse(array) {
+//   let copiedArray = array.slice();
+//   for(let i = 0; i < array.length; i++) {
+//     array[i] = copiedArray[copiedArray.length - 1 - i];
+//   }
+//   return array;
+// }
+
 let list = [1, 2, 3, 4];
 let result = reverse(list);
 console.log(result); // logs [4,3,2,1]
