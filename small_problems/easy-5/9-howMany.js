@@ -9,18 +9,28 @@
 //return wordCountObj
 //loop through obj and log to console key and vale
 
+// function countOccurrences(arr) {
+//   let lowerCasedArr = arr.map(word => word.toLowerCase());
+//   let wordCountObj = {};
+//   lowerCasedArr.forEach(el => {
+//     if (!wordCountObj[el]) {
+//       wordCountObj[el] = 1;
+//     } else {
+//       wordCountObj[el]++;
+//     }
+//   });
+//   for (let word in wordCountObj) {
+//     console.log(`${word} => ${wordCountObj[word]}`)
+//   }
+// }
+
 function countOccurrences(arr) {
-  let lowerCasedArr = arr.map(word => word.toLowerCase());
-  let wordCountObj = {};
-  lowerCasedArr.forEach(el => {
-    if (!wordCountObj[el]) {
-      wordCountObj[el] = 1;
-    } else {
-      wordCountObj[el]++;
-    }
+  let obj = {};
+  arr.forEach(el => {
+    !obj.hasOwnProperty(el) ? obj[el] = 1 : obj[el] += 1;
   });
-  for (let word in wordCountObj) {
-    console.log(`${word} => ${wordCountObj[word]}`)
+  for (let el in obj) {
+    console.log(`${el} => ${obj[el]}`);
   }
 }
 

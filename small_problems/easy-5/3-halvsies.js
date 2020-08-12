@@ -12,6 +12,23 @@ function halvsies(arr) {
   return [firstHalf, secondHalf];
 }
 
+
+// function halvsies(arr) {
+//   let totalArr = [];
+//   let left = [];
+//   let right = [];
+//   let middleIdx = Math.floor((arr.length - 1) / 2);
+//   for (let idx = 0; idx < arr.length; idx++) {
+//     if (idx <= middleIdx) {
+//       left.push(arr[idx]);
+//     } else {
+//       right.push(arr[idx]);
+//     }
+//   }
+//   totalArr.push(left, right);
+//   return totalArr;
+// }
+
 console.log(halvsies([1, 2, 3, 4]));       // [[1, 2], [3, 4]]
 console.log(halvsies([1, 5, 2, 4, 3]));    // [[1, 5, 2], [4, 3]]
 console.log(halvsies([5]));                // [[5], []]

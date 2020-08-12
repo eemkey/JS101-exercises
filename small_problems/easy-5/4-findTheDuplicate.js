@@ -1,17 +1,34 @@
-//input array
-//output: number
+/*
+understand the problem: given an array and need to find the duplicate
+input: array
+output: number
+algorithm: declare a  variable called result that is set to an empty array
+iterate through input array and add each item to result array only if the result array does not already include the current element.
+if it does include the current element, then return that element. 
+*/
+
+// function findDup(arr) {
+//   let newArr = [];
+//   let duplicatedNum;
+//   arr.forEach(num => {
+//     if (!newArr.includes(num)) {
+//       newArr.push(num);
+//     } else {
+//       duplicatedNum = num;
+//     }
+//   });
+//   return duplicatedNum;
+// }
 
 function findDup(arr) {
-  let newArr = [];
-  let duplicatedNum;
-  arr.forEach(num => {
-    if (!newArr.includes(num)) {
-      newArr.push(num);
+  let result = [];
+  for (let num of arr) {
+    if (!result.includes(num)) {
+      result.push(num);
     } else {
-      duplicatedNum = num;
+      return num;
     }
-  });
-  return duplicatedNum;
+  }
 }
 
 console.log(findDup([1, 5, 3, 1]));                                // 1

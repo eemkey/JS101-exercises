@@ -10,12 +10,16 @@ function afterMidnight(time) {
   return ((hours * MINUTES_IN_HOUR) + minutes) % MINUTES_IN_DAY;
 }
 
-function beforeMidnight(time) {
-  let minutes = MINUTES_IN_DAY - afterMidnight(time);
-  if (minutes === MINUTES_IN_DAY) {
-    minutes = 0;
-  }
-  return minutes;
+// function beforeMidnight(time) {
+//   let minutes = MINUTES_IN_DAY - afterMidnight(time);
+//   if (minutes === MINUTES_IN_DAY) {
+//     minutes = 0;
+//   }
+//   return minutes;
+// }
+
+function beforeMidnight(str) {
+  return (MINS_PER_DAY - afterMidnight(str)) % MINS_PER_DAY;
 }
 
 
